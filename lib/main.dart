@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mbad_week3_mini_project3/CircleButton.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 void main() {
   runApp(MyApp());
 }
@@ -13,12 +14,26 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String selectedTheme = 'Blue';
-
+  SharedPreferences? prefs;
   MaterialColor themeColor = Colors.blue;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadSharedPref();
+  }
+
+  void loadSharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+    if(prefs!.containsKey('selectedTheme'))
+      setTheme(prefs!.getString('selectedTheme'));
+  }
 
   void setTheme(themeChosen) {
     print(themeChosen);
     selectedTheme = themeChosen;
+    prefs!.setString('selectedTheme', selectedTheme);
 
     setState(() {
       if (selectedTheme == 'Blue')
